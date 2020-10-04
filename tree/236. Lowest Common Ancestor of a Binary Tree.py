@@ -8,12 +8,22 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        def lca(node, p, q):
-            if node == None: return None
-            if node.val == p.val or node.val == q.val: return node
-            left_return = lca(node.left, p, q)
-            right_return = lca(node.right, p, q)
-            if left_return is None: return right_return
-            if right_return is None: return left_return
-            return node
-        return lca(root, p, q)
+        self.result = (-1, None)
+
+        def dfs(node, level, p_val, q_val):
+            if node is None:
+                return 0
+
+            left = dfs(node.left, level + 1, p_val, q_val)
+            right = dfs(node.right, level + 1, p_val, q_val)
+            current = 1 if node.val in (p_val, q_val) else 0
+
+            count = left + right + current
+
+            if count >= 2:
+                if level > self.result[0]:
+                    self.result = (level, node)
+            return 1 if count > 0 else 0
+
+        dfs(root, 0, p.val, q.val)
+        return self.result[1]
