@@ -7,16 +7,25 @@
 #         self.right = right
 class Solution:
     def bstFromPreorder(self, preorder: List[int]) -> TreeNode:
-        def dfs(preorder, start, end):
-            if start > end:
-                return None
-            node = TreeNode(preorder[start])
-            index = start + 1
-            while index <= end and preorder[index] < preorder[start]:
-                index += 1
-            node.left = dfs(preorder, start + 1, index - 1)
-            node.right = dfs(preorder, index, end)
-            return node
 
-        return dfs(preorder, 0, len(preorder) - 1)
+        def find(target, start, end):
+            output = start
+            while output < end:
+                if preorder[output] > target:
+                    break
+                output += 1
+            return output
+
+        def helper(start, end):
+            if start == end: return None
+            mid = find(preorder[start], start + 1, end)
+            root = TreeNode(preorder[start])
+            root.left = helper(start + 1, mid)
+            root.right = helper(mid, end)
+            return root
+
+        return helper(0, len(preorder))
+
+
+
 
