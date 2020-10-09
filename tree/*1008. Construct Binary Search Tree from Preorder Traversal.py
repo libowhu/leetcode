@@ -7,24 +7,16 @@
 #         self.right = right
 class Solution:
     def bstFromPreorder(self, preorder: List[int]) -> TreeNode:
-
-        def find(target, start, end):
-            output = start
-            while output < end:
-                if preorder[output] > target:
-                    break
-                output += 1
-            return output
-
-        def helper(start, end):
-            if start == end: return None
-            mid = find(preorder[start], start + 1, end)
-            root = TreeNode(preorder[start])
-            root.left = helper(start + 1, mid)
-            root.right = helper(mid, end)
+        def helper(nums, bound):
+            if not nums or nums[-1] > bound: return None
+            num = nums.pop()
+            root = TreeNode(num)
+            root.left = helper(nums, num)
+            root.right = helper(nums, bound)
             return root
 
-        return helper(0, len(preorder))
+        return helper(preorder[::-1], sys.maxsize)
+    
 
 
 
