@@ -9,22 +9,24 @@
 class Codec:
 
     def serialize(self, root):
-        queue = collections.deque([])
+        nums = []
 
-        def in_order(root, queue):
+        def pre_order(root, nums):
             if root is None:
-                queue.append(None)
+                nums.append(None)
             else:
-                queue.append(root.val)
-                in_order(root.left, queue)
-                in_order(root.right, queue)
+                nums.append(root.val)
+                pre_order(root.left, nums)
+                pre_order(root.right, nums)
 
-        in_order(root, queue)
-        return queue
+        pre_order(root, nums)
+        return json.dumps(nums)
 
     def deserialize(self, data):
+        nums = json.loads(data)
+
         def helper(data):
-            val = data.popleft()
+            val = data.pop()
             if val is None:
                 return None
             else:
@@ -33,7 +35,7 @@ class Codec:
                 node.right = helper(data)
                 return node
 
-        root = helper(data)
+        root = helper(nums[::-1])
         return root
 
 # Your Codec object will be instantiated and called as such:
