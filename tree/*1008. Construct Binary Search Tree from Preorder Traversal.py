@@ -16,7 +16,7 @@ class Solution:
             return root
 
         return helper(preorder[::-1], sys.maxsize)
-    
+
 
 
 
