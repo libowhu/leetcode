@@ -2,22 +2,24 @@
 class Solution:
     def calculate(self, s: str) -> int:
         stack = []
-        num = 0
-        presign = "+"
+        num = ""
+        sign = "+"
+        q = collections.deque(list(s + '+'))
 
-        for c in s + "+":
+        while q:
+            c = q.popleft()
             if c.isdigit():
-                num = num * 10 + int(c)
+                num += c
             elif c in "+-*/":
-                if presign == '+':
-                    stack.append(num)
-                if presign == '-':
-                    stack.append(-num)
-                if presign == '*':
-                    stack.append(stack.pop() * num)
-                if presign == '/':
-                    stack.append(int(stack.pop() / num))
-                presign = c
-                num = 0
+                if sign == "+":
+                    stack.append(int(num))
+                if sign == "-":
+                    stack.append(-int(num))
+                if sign == "*":
+                    stack.append(stack.pop() * int(num))
+                if sign == "/":
+                    stack.append(int(stack.pop() / int(num)))
+                sign = c
+                num = ""
 
         return sum(stack)
