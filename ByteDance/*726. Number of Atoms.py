@@ -1,42 +1,43 @@
-# 
+# https://leetcode.com/problems/number-of-atoms/
 class Solution:
     def countOfAtoms(self, formula: str) -> str:
-        stack = []
-        atom = ""
-        num = 0
-        count = 1
-        elements = collections.defaultdict(int)
-        digit = 0
-        coff = 1
+        def helper(q):
+            result = collections.defaultdict(int)
+            atom = ""
+            num = ""
 
-        for c in formula[::-1]:
-            if c.isdigit():
-                num += 10 ** digit * int(c)
-                digit += 1
-            elif c.isupper():
-                atom += c
-                count = num if num != 0 else 1
-                elements[atom[::-1]] += count * coff
-                atom = ""
-                num = digit = 0
-            elif c.islower():
-                atom += c
-            elif c == ')':
-                count = num if num != 0 else 1
-                stack.append(count)
-                coff *= count
-                num = count = digit = 0
-            elif c == '(':
-                coff //= stack.pop()
-                coff = max(1, coff)
-                num = count = digit = 0
+            while q:
+                c = q.popleft()
+                if c.isupper() or c == "#":
+                    if atom:
+                        result[atom] += int(num or 1)
+                    atom = c
+                    num = ""
+                if c.islower():
+                    atom += c
+                if c.isdigit():
+                    num += c
+                if c == "(":
+                    temp = helper(q)
+                    temp_num = ""
+                    if q and q[0].isdigit():
+                        while q and q[0].isdigit():
+                            temp_num += q.popleft()
+                    for key in temp:
+                        result[key] += temp[key] * int(temp_num or 1)
+                if c == ")":
+                    if atom:
+                        result[atom] += int(num or 1)
+                    break
+            return result
 
-        sorted_keys = sorted(elements.keys())
-        output = ""
+        q = collections.deque(list(formula + '#'))
+        mapper = helper(q)
+        sorted_keys = sorted(mapper.keys())
+        result = ""
         for key in sorted_keys:
-            if elements[key] == 1:
-                output += key
+            if mapper[key] == 1:
+                result += key
             else:
-                output += key + str(elements[key])
-
-        return output
+                result += key + str(mapper[key])
+        return result
