@@ -1,29 +1,30 @@
 # https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        open = 0
-        output = []
+        left = right = 0
         for c in s:
             if c == '(':
-                open += 1
-                output.append(c)
-                continue
+                left += 1
             if c == ')':
-                if open <= 0:
-                    continue
+                if left > 0:
+                    left -= 1
                 else:
-                    open -= 1
-            output.append(c)
+                    right += 1
 
-        if open == 0:
-            return output
-        else:
-            result = []
-            for c in output[::-1]:
-                if c == '(':
-                    if open > 0:
-                        open -= 1
-                        continue
+        output = []
+        for c in s:
+            if c == ')' and right > 0:
+                right -= 1
+                continue
+            else:
+                output.append(c)
+
+        result = []
+        for c in output[::-1]:
+            if c == '(' and left > 0:
+                left -= 1
+                continue
+            else:
                 result.append(c)
 
-        return ''.join(result[::-1])
+        return "".join(result[::-1])
