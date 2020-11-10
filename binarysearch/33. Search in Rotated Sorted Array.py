@@ -6,15 +6,17 @@ class Solution:
 
         while l < r:
             m = l + (r - l) // 2
-            if nums[m] == target: return m
-            if nums[m] >= nums[0]:
-                if nums[m] > target >= nums[0]:
-                    r = m
-                else:
-                    l = m + 1
-            if nums[m] <= nums[n - 1]:
-                if nums[n - 1] >= target > nums[m]:
-                    l = m + 1
-                else:
-                    r = m
+            if nums[m] == target:
+                return m
+            else:
+                if nums[m] > nums[n - 1]:
+                    if nums[0] <= target < nums[m]:
+                        r = m
+                    else:
+                        l = m + 1
+                elif nums[m] <= nums[n - 1]:
+                    if nums[m] < target <= nums[n - 1]:
+                        l = m + 1
+                    else:
+                        r = m
         return -1
