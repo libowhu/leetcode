@@ -4,20 +4,13 @@ class Solution:
         n = len(arr)
         if n < 3: return 0
 
-        up = [0] * n
-        down = [0] * n
-        mountain = [0] * n
-
+        up = down = result = 0
         for i in range(1, n):
-            if arr[i] > arr[i - 1]:
-                up[i] = up[i - 1] + 1
+            if down and arr[i - 1] < arr[i] or arr[i - 1] == arr[i]:
+                up = down = 0
+            if arr[i - 1] < arr[i]: up += 1
+            if arr[i - 1] > arr[i]: down += 1
+            if down and up:
+                result = max(result, up + down + 1)
+        return result
 
-        for j in range(n - 2, -1, -1):
-            if arr[j] > arr[j + 1]:
-                down[j] = down[j + 1] + 1
-
-        for k in range(1, n - 1):
-            if up[k] and down[k]:
-                mountain[k] = up[k] + down[k]
-
-        return 0 if max(mountain) == 0 else max(mountain) + 1
