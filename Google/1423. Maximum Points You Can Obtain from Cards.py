@@ -8,3 +8,4 @@ class Solution:
             window += cardPoints[n-k+i]-cardPoints[i]
             result = max(result, window)
         return result
+g
