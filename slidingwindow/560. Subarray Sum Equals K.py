@@ -2,17 +2,15 @@
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
         n = len(nums)
-        A = [0] * (n + 1)
-        for i in range(1, n + 1):
-            A[i] = A[i - 1] + nums[i - 1]
+        hashmap = {0: 1}
+        count = cur_sum = 0
 
-        count = 0
-        hashmap = {}
-        for i in range(n + 1):
-            if A[i] - k in hashmap:
-                count += hashmap[A[i] - k]
-            if A[i] in hashmap:
-                hashmap[A[i]] += 1
+        for r in range(n):
+            cur_sum += nums[r]
+            if cur_sum - k in hashmap:
+                count += hashmap[cur_sum - k]
+            if cur_sum in hashmap:
+                hashmap[cur_sum] += 1
             else:
-                hashmap[A[i]] = 1
+                hashmap[cur_sum] = 1
         return count
