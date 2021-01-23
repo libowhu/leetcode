@@ -41,3 +41,18 @@ class Solution:
                     heapq.heappush(heap, end)
             return len(heap)
 
+
+    class Solution:
+        def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+            if not intervals: return 0
+            hashmap = collections.defaultdict(int)
+            for interval in intervals:
+                start, end = interval
+                hashmap[start] += 1
+                hashmap[end] -= 1
+
+            res = cum = 0
+            for key in sorted(hashmap.keys()):
+                cum += hashmap[key]
+                res = max(res, cum)
+            return res
