@@ -34,3 +34,27 @@ class MyCalendar:
 # Your MyCalendar object will be instantiated and called as such:
 # obj = MyCalendar()
 # param_1 = obj.book(start,end)
+
+
+class MyCalendar:
+
+    def __init__(self):
+        self.bookings = []
+
+    def book(self, start: int, end: int) -> bool:
+        new_bookings = []
+        for booking in self.bookings:
+            if end <= booking[0]:
+                new_bookings.append([start, end])
+                start, end = booking
+            elif start >= booking[1]:
+                new_bookings.append(booking)
+            else:
+                return False
+        new_bookings.append([start, end])
+        self.bookings = new_bookings
+        return True
+
+# Your MyCalendar object will be instantiated and called as such:
+# obj = MyCalendar()
+# param_1 = obj.book(start,end)
